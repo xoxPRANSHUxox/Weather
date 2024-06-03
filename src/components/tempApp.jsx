@@ -25,7 +25,7 @@ export default function TempApp() {
   }
 
   useEffect(() => {
-    fetchApi(`https://api.api-ninjas.com/v1/weather?city=${search}`).then((data) => {
+    fetchApi().then((data) => {
       if (data) {
         console.log(data);
       } else {
