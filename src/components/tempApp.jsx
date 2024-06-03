@@ -25,7 +25,7 @@ export default function TempApp() {
   }
 
   useEffect(() => {
-    fetchApi().then((data) => {
+    fetchApi(`https://api.api-ninjas.com/v1/weather?city=${search}`).then((data) => {
       if (data) {
         console.log(data);
       } else {
@@ -36,7 +36,7 @@ export default function TempApp() {
 
   return (
     <div>
-      <img src={background} />
+      <img src={background} alt="background"/>
       <section className="main">
         <h1 className="heading">Your Weather App</h1>
         <div className="input">
