@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import background from "../../src/components/images/background.jpg"
+
 export default function TempApp() {
   const [city, setCity] = useState(null);
   const [search, setSearch] = useState("Delhi");
 
-  async function fetchApi() {
+  const fetchApi = useCallback(async () => {
     try {
       const response = await fetch(
         `https://api.api-ninjas.com/v1/weather?city=${search}`,
@@ -20,19 +21,18 @@ export default function TempApp() {
       return data;
     } catch (error) {
       console.error("Error:", error);
+      setCity(null); // Reset city state in case of an error
       return null; // Return null in case of an error
     }
-  }
+  }, [search]);
 
   useEffect(() => {
     fetchApi().then((data) => {
-      if (data) {
-        console.log(data);
-      } else {
+      if (!data) {
         console.log("Failed to fetch data.");
       }
     });
-  }, [search]);
+  }, [fetchApi]);
 
   return (
     <div>
@@ -50,47 +50,47 @@ export default function TempApp() {
           />
         </div>
 
-        {!city || city == null ? (
+        {!city ? (
           <p>No Data found</p>
         ) : (
           <div className="info container">
             <div className="first">
               <h1 className="min_temp">
                 {" "}
-                <i class="fa-solid fa-temperature-arrow-down"></i> Minimum
-                Temperature :- {city && city.min_temp}
+                <i className="fa-solid fa-temperature-arrow-down"></i> Minimum
+                Temperature :- {city.min_temp}
               </h1>
-              <h1 className="temp">Temperature :- {city && city.temp}</h1>
+              <h1 className="temp">Temperature :- {city.temp}</h1>
               <h1 className="max_temp">
-                <i class="fa-solid fa-temperature-arrow-up"></i>
-                Maximum Temperature :- {city && city.max_temp}
+                <i className="fa-solid fa-temperature-arrow-up"></i>
+                Maximum Temperature :- {city.max_temp}
               </h1>
             </div>
             <div className="second">
               <h1 className="sunRise">
-                <i class="fa-solid fa-sun sunAnimation"></i> Sunrise :-{" "}
-                {city && city.sunrise}
+                <i className="fa-solid fa-sun sunAnimation"></i> Sunrise :-{" "}
+                {city.sunrise}
               </h1>
               <h1 className="location">{search}</h1>
               <h1 className="sunSet">
-                <i class="fa-solid fa-sun sunAnimation"></i> SunSet :-{" "}
-                {city && city.sunset}
+                <i className="fa-solid fa-sun sunAnimation"></i> SunSet :-{" "}
+                {city.sunset}
               </h1>
             </div>
 
             <div className="third">
               <h1 className="windDegree">
-                <i class="fa-solid fa-wind"></i> Wind Degree :-{" "}
-                {city && city.wind_degrees}
+                <i className="fa-solid fa-wind"></i> Wind Degree :-{" "}
+                {city.wind_degrees}
               </h1>
               <h1 className="windSpeed">
-                <i class="fa-solid fa-wind"></i> Wind Speed :-{" "}
-                {city && city.wind_speed}
+                <i className="fa-solid fa-wind"></i> Wind Speed :-{" "}
+                {city.wind_speed}
               </h1>
             </div>
           </div>
         )}
       </section>
-      </div>
+    </div>
   );
 }
